@@ -224,6 +224,11 @@ ${renderBannerTrialPago(t)}
   <label>Monto para envío gratis ($)
     <input type="number" name="umbral" value="${t.umbral || 50000}">
   </label>
+  <div class="banner banner--warn" style="margin-top:10px">
+    ⚠️ Este monto es solo el <b>cartel visual</b>. Para que el envío realmente salga gratis en el checkout,
+    configurá el mismo monto en tu tienda: <b>Administración → Configuraciones → Métodos de envío → Costo →
+    "Envío gratis a partir de un monto"</b>.
+  </div>
   <label>Texto cuando falta (usá {monto})
     <input type="text" name="texto_falta" value="${(t.texto_falta || "¡Te faltan {monto} para tu ENVÍO GRATIS! 🚚").replace(/"/g,'&quot;')}">
   </label>
