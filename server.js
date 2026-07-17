@@ -221,6 +221,11 @@ function renderAdminHtml(t) {
   .banner--off{background:var(--coral)}
   .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
   .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
+  .admin-footer{margin-top:36px;padding-top:20px;border-top:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .admin-footer .brand{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
+  .admin-footer .brand a{color:var(--ink);font-weight:700;text-decoration:underline}
+  .admin-footer .soporte{display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-weight:700;font-size:13px;box-shadow:var(--sh);text-decoration:none;transition:transform .1s ease}
+  .admin-footer .soporte:hover{transform:translate(-1px,-1px)}
 </style></head>
 <body>
 <h1>🚚 Barra de Envío Gratis</h1>
@@ -246,6 +251,10 @@ ${renderBannerTrialPago(t)}
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
+<div class="admin-footer">
+  <span class="brand">Una app de <a href="https://hacecrecertutienda.com" target="_blank" rel="noopener">hacecrecertutienda.com</a></span>
+  <a class="soporte" href="https://wa.me/5490000000000" target="_blank" rel="noopener">💬 Soporte por WhatsApp</a>
+</div>
 <script>
 document.getElementById('f').addEventListener('submit', async (e) => {
   e.preventDefault();
