@@ -24,7 +24,7 @@ const {
   SUPABASE_SERVICE_KEY,
   APP_URL, // https://barra.hacecrecertutienda.com
   TRIAL_DIAS = "7",
-  MP_PAYMENT_LINK = "",
+  MP_PREAPPROVAL_PLAN_ID = "69232628e4754d9a8b484df4257f45fb",
   PORT = 3000,
 } = process.env;
 
@@ -176,6 +176,7 @@ app.listen(PORT, () => console.log(`Barra Envío Gratis escuchando en ${PORT}`))
 
 // ================= Banner trial/pago =================
 function renderBannerTrialPago(t) {
+  const linkPago = `https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=${MP_PREAPPROVAL_PLAN_ID}&external_reference=barra:${t.store_id}`;
   if (t.pago) {
     return `<div class="banner banner--ok">✅ Suscripción activa. ¡Gracias por confiar en nosotros!</div>`;
   }
@@ -185,14 +186,12 @@ function renderBannerTrialPago(t) {
   if (diasRestantes > 0) {
     return `<div class="banner banner--warn">
       ⏳ Te quedan <b>${diasRestantes} día${diasRestantes === 1 ? "" : "s"}</b> de prueba gratis.
-      Para no perder la barra, activá tu suscripción acá: <a href="${MP_PAYMENT_LINK}" target="_blank">Pagar suscripción</a><br>
-      <span class="storeid">ID de tienda (indicalo al pagar): ${t.store_id}</span>
+      Para no perder la barra, activá tu suscripción acá: <a href="${linkPago}" target="_blank">Pagar suscripción</a>
     </div>`;
   }
   return `<div class="banner banner--off">
     🚫 Tu prueba gratis terminó y la barra está desactivada en tu tienda.
-    Activá tu suscripción para reactivarla: <a href="${MP_PAYMENT_LINK}" target="_blank">Pagar suscripción</a><br>
-    <span class="storeid">ID de tienda (indicalo al pagar): ${t.store_id}</span>
+    Activá tu suscripción para reactivarla: <a href="${linkPago}" target="_blank">Pagar suscripción</a>
   </div>`;
 }
 
