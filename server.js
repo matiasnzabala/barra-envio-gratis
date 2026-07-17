@@ -174,6 +174,28 @@ app.get("/", (req, res) => res.send("Barra de Envío Gratis — OK"));
 
 app.listen(PORT, () => console.log(`Barra Envío Gratis escuchando en ${PORT}`));
 
+// ================= Banner trial/pago =================
+function renderBannerTrialPago(t) {
+  if (t.pago) {
+    return `<div class="banner banner--ok">✅ Suscripción activa. ¡Gracias por confiar en nosotros!</div>`;
+  }
+  const diasRestantes = t.trial_ends_at
+    ? Math.ceil((new Date(t.trial_ends_at) - new Date()) / (1000 * 60 * 60 * 24))
+    : 0;
+  if (diasRestantes > 0) {
+    return `<div class="banner banner--warn">
+      ⏳ Te quedan <b>${diasRestantes} día${diasRestantes === 1 ? "" : "s"}</b> de prueba gratis.
+      Para no perder la barra, activá tu suscripción acá: <a href="${MP_PAYMENT_LINK}" target="_blank">Pagar suscripción</a><br>
+      <span class="storeid">ID de tienda (indicalo al pagar): ${t.store_id}</span>
+    </div>`;
+  }
+  return `<div class="banner banner--off">
+    🚫 Tu prueba gratis terminó y la barra está desactivada en tu tienda.
+    Activá tu suscripción para reactivarla: <a href="${MP_PAYMENT_LINK}" target="_blank">Pagar suscripción</a><br>
+    <span class="storeid">ID de tienda (indicalo al pagar): ${t.store_id}</span>
+  </div>`;
+}
+
 // ================= HTML admin =================
 function renderAdminHtml(t) {
   return `<!DOCTYPE html>
@@ -188,9 +210,16 @@ function renderAdminHtml(t) {
   input[type=color]{margin-top:4px}
   button{margin-top:24px;background:var(--amber);color:#12201B;border:none;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer}
   .toast{display:none;margin-top:12px;color:#7CD992}
+  .banner{padding:14px 16px;border-radius:8px;margin-bottom:20px;font-size:14px;line-height:1.5}
+  .banner--ok{background:#1e3a2a;border:1px solid #2f5c40}
+  .banner--warn{background:#3a2a1e;border:1px solid #5c4a2f}
+  .banner--off{background:#3a1e1e;border:1px solid #5c2f2f}
+  .banner a{color:var(--amber);font-weight:700}
+  .banner .storeid{opacity:.7;font-family:monospace;font-size:12px}
 </style></head>
 <body>
 <h1>🚚 Barra de Envío Gratis</h1>
+${renderBannerTrialPago(t)}
 <form id="f">
   <label>Monto para envío gratis ($)
     <input type="number" name="umbral" value="${t.umbral || 50000}">
