@@ -226,8 +226,24 @@ document.getElementById('f').addEventListener('submit', async (e) => {
 function WIDGET_JS(APP_URL) {
   return `(function(){
   var API = "${APP_URL}";
-  var storeId = (window.LS && window.LS.store && window.LS.store.id) || window.__TN_STORE_ID__ || document.querySelector('[data-store-id]')?.dataset.storeId;
-  if(!storeId){ console.warn('[BarraEnvioGratis] no se encontró store_id'); return; }
+
+  // El store_id viaja en el propio <script src=".../widget.js?store=68310">
+  // (mismo patrón que embed.js de Ruleta y widget.js de Aviso Stock)
+  function obtenerStoreId(){
+    var thisScript = document.currentScript;
+    if(!thisScript){
+      var scripts = document.querySelectorAll('script[src*="widget.js"]');
+      thisScript = scripts[scripts.length - 1];
+    }
+    if(!thisScript) return null;
+    try {
+      var url = new URL(thisScript.src);
+      return url.searchParams.get('store');
+    } catch(e){ return null; }
+  }
+
+  var storeId = obtenerStoreId();
+  if(!storeId){ console.warn('[BarraEnvioGratis] falta ?store=ID en el script src'); return; }
 
   var cfg = null;
   var barEl = null;
@@ -237,11 +253,17 @@ function WIDGET_JS(APP_URL) {
     cfg = c;
     montarBarra();
     actualizar();
-    // Observar cambios en el carrito (agregar/quitar productos actualiza el DOM via AJAX)
-    var obs = new MutationObserver(function(){ actualizar(); });
-    obs.observe(document.body, {childList:true, subtree:true, characterData:true});
-    setInterval(actualizar, 4000); // fallback por si el MutationObserver no detecta el cambio
+    // Observar cambios en el carrito (agregar/quitar productos actualiza el DOM via AJAX).
+    // Se re-conecta al contenedor real del carrito cuando aparece (Angular lo monta async).
+    observarCarrito();
+    setInterval(actualizar, 4000); // fallback por si el observer no llega a tiempo
   }).catch(function(e){ console.warn('[BarraEnvioGratis]', e); });
+
+  function observarCarrito(){
+    var target = document.querySelector('app-shopping-cart') || document.body;
+    var obs = new MutationObserver(function(){ actualizar(); });
+    obs.observe(target, {childList:true, subtree:true, characterData:true});
+  }
 
   function montarBarra(){
     barEl = document.createElement('div');
@@ -254,14 +276,9 @@ function WIDGET_JS(APP_URL) {
   }
 
   function obtenerTotalCarrito(){
-    // Estrategia 1: API JS del tema (si existe)
-    try {
-      if (window.LS && window.LS.cart && typeof window.LS.cart.total !== 'undefined') {
-        return Number(window.LS.cart.total);
-      }
-    } catch(e){}
-    // Estrategia 2: buscar en el DOM un total de carrito conocido
-    var selectores = ['[data-cart-total]','.cart-total','.js-cart-total','#CartTotal','.cart__total','[data-total-carrito]'];
+    // Selector real calibrado en la tienda de prueba: subtotal SIN envío
+    // (no queremos que el costo de envío cuente para el umbral)
+    var selectores = ['.content__subtotal', 'app-text-subtotal', '.subtotal', '[data-cart-total]','.cart-total','.js-cart-total'];
     for (var i=0;i<selectores.length;i++){
       var el = document.querySelector(selectores[i]);
       if (el){
@@ -269,11 +286,7 @@ function WIDGET_JS(APP_URL) {
         if (n !== null) return n;
       }
     }
-    // Estrategia 3: buscar cualquier elemento con la palabra "Total" cerca de un $ (fallback débil)
-    var candidatos = Array.from(document.querySelectorAll('body *')).filter(function(el){
-      return el.children.length === 0 && /total/i.test(el.textContent) === false && /\\$\\s?[\\d.,]+/.test(el.textContent);
-    });
-    return null; // sin dato confiable, no mostramos barra en este fallback
+    return null; // carrito vacío o sin dato confiable: no mostramos la barra
   }
 
   function parsearMonto(txt){
