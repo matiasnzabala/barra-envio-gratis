@@ -201,21 +201,26 @@ function renderAdminHtml(t) {
   return `<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8">
 <title>Barra de Envío Gratis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#12201B;--amber:#E8A33D;--coral:#E8632C;--text:#F2EDE4}
-  body{background:var(--bg);color:var(--text);font-family:'Public Sans',sans-serif;padding:32px;max-width:560px;margin:0 auto}
-  h1{font-family:'Fraunces',serif;font-weight:600}
-  label{display:block;margin-top:16px;font-size:14px;opacity:.85}
-  input[type=text],input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid #3a4a41;background:#1a2a22;color:var(--text);margin-top:4px;box-sizing:border-box}
-  input[type=color]{margin-top:4px}
-  button{margin-top:24px;background:var(--amber);color:#12201B;border:none;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer}
-  .toast{display:none;margin-top:12px;color:#7CD992}
-  .banner{padding:14px 16px;border-radius:8px;margin-bottom:20px;font-size:14px;line-height:1.5}
-  .banner--ok{background:#1e3a2a;border:1px solid #2f5c40}
-  .banner--warn{background:#3a2a1e;border:1px solid #5c4a2f}
-  .banner--off{background:#3a1e1e;border:1px solid #5c2f2f}
-  .banner a{color:var(--amber);font-weight:700}
-  .banner .storeid{opacity:.7;font-family:monospace;font-size:12px}
+  :root{--bg:#fdf9f0;--pink:#ff3d81;--mint:#3ddc97;--canary:#ffd23f;--coral:#ff6b5e;--ink:#111111;--ink-dim:#5b5648;--card:#ffffff;--sh:4px 4px 0px 0px #111111}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:500;padding:32px;max-width:560px;margin:0 auto}
+  h1{font-family:'Archivo Black',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.4rem}
+  label{display:block;margin-top:16px;font-size:14px;font-weight:700;color:var(--ink-dim)}
+  input[type=text],input[type=number]{width:100%;padding:10px;border-radius:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);margin-top:4px;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-weight:600}
+  input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--pink)}
+  input[type=color]{margin-top:4px;border:2px solid var(--ink);border-radius:8px}
+  button{margin-top:24px;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
+  button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
+  button:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
+  .toast{display:none;margin-top:12px;color:var(--ink);font-weight:700;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;box-shadow:var(--sh)}
+  .banner{padding:14px 16px;border-radius:14px;margin-bottom:20px;font-size:14px;line-height:1.5;border:2px solid var(--ink);box-shadow:var(--sh);font-weight:600}
+  .banner--ok{background:var(--mint)}
+  .banner--warn{background:var(--canary)}
+  .banner--off{background:var(--coral)}
+  .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
+  .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
 </style></head>
 <body>
 <h1>🚚 Barra de Envío Gratis</h1>
