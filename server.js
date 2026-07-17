@@ -47,7 +47,7 @@ app.get("/callback", async (req, res) => {
     const { code } = req.query;
     if (!code) return res.status(400).send("Falta code");
 
-    const tokenResp = await fetch("https://www.tiendanegocio.com/apps/authorize/token", {
+    const tokenResp = await fetch("https://developers.tiendanegocio.com/v1/oauth/app/token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -57,15 +57,16 @@ app.get("/callback", async (req, res) => {
         code,
       }),
     });
-    const tokenData = await tokenResp.json();
+    const tokenJson = await tokenResp.json();
+    const tokenData = tokenJson.data || tokenJson; // TN anida la respuesta en .data
     if (!tokenData.access_token) {
-      console.error("Error token:", tokenData);
+      console.error("Error token:", tokenJson);
       return res.status(500).send("No se pudo autenticar con Tienda Negocio");
     }
 
-    const storeId = String(tokenData.user_id);
+    const storeId = String(tokenData.store_id);
     if (!storeId || storeId === "undefined") {
-      console.error("No vino user_id en el token:", tokenData);
+      console.error("No vino store_id en el token:", tokenJson);
       return res.status(500).send("La respuesta de Tienda Negocio no trajo store_id");
     }
     const trialEnds = new Date(Date.now() + Number(TRIAL_DIAS) * 24 * 60 * 60 * 1000).toISOString();
