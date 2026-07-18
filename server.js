@@ -243,6 +243,13 @@ function renderAdminHtml(t) {
   input[type=text],input[type=number]{width:100%;padding:10px;border-radius:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);margin-top:4px;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-weight:600}
   input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--pink)}
   input[type=color]{margin-top:4px;border:2px solid var(--ink);border-radius:8px}
+  .switch-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:999px;padding:10px 16px 10px 10px;flex:none;width:fit-content;margin-top:16px}
+  .switch-wrap input{display:none}
+  .switch-track{width:40px;height:22px;border-radius:999px;background:#e3ddc9;border:2px solid var(--ink);position:relative;transition:background .2s ease;flex:none}
+  .switch-track::after{content:'';position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s ease}
+  .switch-wrap input:checked + .switch-track{background:var(--mint)}
+  .switch-wrap input:checked + .switch-track::after{transform:translateX(18px)}
+  .switch-label{font-size:0.88rem;font-weight:700;white-space:nowrap}
   button{margin-top:24px;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
   button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
   button:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
@@ -289,7 +296,11 @@ ${renderBannerTrialPago(t)}
   </label>
   <label>Color barra <input type="color" name="color_barra" value="${t.color_barra || "#E8A33D"}"></label>
   <label>Color fondo <input type="color" name="color_fondo" value="${t.color_fondo || "#12201B"}"></label>
-  <label><input type="checkbox" name="activo" ${t.activo !== false ? "checked" : ""} style="width:auto;display:inline"> Activo</label>
+  <label class="switch-wrap">
+    <input type="checkbox" name="activo" ${t.activo !== false ? "checked" : ""} onchange="this.nextElementSibling.nextElementSibling.textContent = this.checked ? 'Barra activa' : 'Barra desactivada'" />
+    <span class="switch-track"></span>
+    <span class="switch-label">${t.activo !== false ? "Barra activa" : "Barra desactivada"}</span>
+  </label>
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
