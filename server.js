@@ -195,6 +195,39 @@ function renderBannerTrialPago(t) {
   </div>`;
 }
 
+// ================= Catálogo cruzado de apps =================
+const APPS_CATALOGO = [
+  {
+    nombre: 'Ruleta WhatsApp',
+    descripcion: 'Ruleta de premios para captar leads y dar cupones a cambio de un giro.',
+    icono: '🎡',
+  },
+  {
+    nombre: 'Raspadita',
+    descripcion: 'Raspadita de premios para captar leads y dar cupones a cambio de jugar.',
+    icono: '🎟️',
+  },
+  {
+    nombre: 'Aviso de Stock',
+    descripcion: 'Avisa por email a tus clientes cuando un producto agotado vuelve a tener stock.',
+    icono: '📦',
+  },
+];
+
+function generarAppsHTML() {
+  const cards = APPS_CATALOGO.map((a) => `
+      <a class="app-card" href="https://hacecrecertutienda.com" target="_blank" rel="noopener">
+        <div class="app-icon">${a.icono}</div>
+        <div class="app-info">
+          <div class="app-top"><span class="app-name">${a.nombre}</span><span class="app-badge">Activa</span></div>
+          <p class="app-desc">${a.descripcion}</p>
+        </div>
+      </a>`).join('');
+  return `
+<div class="section-label">Más herramientas para tu tienda</div>
+<div class="apps-grid">${cards}</div>`;
+}
+
 // ================= HTML admin =================
 function renderAdminHtml(t) {
   return `<!DOCTYPE html>
@@ -220,6 +253,16 @@ function renderAdminHtml(t) {
   .banner--off{background:var(--coral)}
   .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
   .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
+  .section-label{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-top:32px;margin-bottom:12px}
+  .apps-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  .app-card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .12s ease,box-shadow .12s ease}
+  .app-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0px 0px var(--ink)}
+  .app-icon{font-size:1.5rem;line-height:1;flex:none;margin-top:2px}
+  .app-info{flex:1;min-width:0}
+  .app-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .app-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem}
+  .app-desc{color:var(--ink-dim);font-size:0.85rem;line-height:1.4;font-weight:500}
+  .app-badge{font-family:'Space Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:999px;flex:none;border:1.5px solid var(--ink);font-weight:700;background:var(--mint);color:var(--ink)}
   .admin-footer{margin-top:36px;padding-top:20px;border-top:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
   .admin-footer .brand{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
   .admin-footer .brand a{color:var(--ink);font-weight:700;text-decoration:underline}
@@ -250,6 +293,7 @@ ${renderBannerTrialPago(t)}
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
+${generarAppsHTML()}
 <div class="admin-footer">
   <span class="brand">Una app de <a href="https://hacecrecertutienda.com" target="_blank" rel="noopener">hacecrecertutienda.com</a></span>
   <a class="soporte" href="https://wa.me/5490000000000" target="_blank" rel="noopener">💬 Soporte por WhatsApp</a>
