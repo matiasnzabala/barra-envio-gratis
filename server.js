@@ -289,18 +289,26 @@ function renderAdminHtml(t, vistas) {
   :root{--bg:#fdf9f0;--pink:#ff3d81;--mint:#3ddc97;--canary:#ffd23f;--coral:#ff6b5e;--ink:#111111;--ink-dim:#5b5648;--card:#ffffff;--sh:4px 4px 0px 0px #111111}
   body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:500;padding:32px;max-width:560px;margin:0 auto}
   h1{font-family:'Archivo Black',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.4rem}
+  .eyebrow{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;color:var(--pink);font-weight:700;display:block;margin-bottom:6px}
+  .status-hero{background:var(--card);border:2px solid var(--ink);border-radius:16px;box-shadow:var(--sh);padding:22px 24px;margin-bottom:16px}
+  .status-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .status-hero-stats-label{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;font-weight:700;color:var(--ink-dim);margin-top:20px}
+  .status-hero-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+  .stat-tile{flex:1;min-width:100px;background:var(--bg);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+  .stat-num{font-family:'Archivo Black',sans-serif;font-size:1.6rem;line-height:1}
+  .stat-label{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;font-size:0.68rem;color:var(--ink-dim);font-weight:700}
   label{display:block;margin-top:16px;font-size:14px;font-weight:700;color:var(--ink-dim)}
   input[type=text],input[type=number]{width:100%;padding:10px;border-radius:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);margin-top:4px;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-weight:600}
   input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--pink)}
   input[type=color]{margin-top:4px;border:2px solid var(--ink);border-radius:8px}
-  .switch-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:999px;padding:10px 16px 10px 10px;flex:none;width:fit-content;margin-top:16px}
+  .switch-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:999px;padding:10px 16px 10px 10px;flex:none;width:fit-content}
   .switch-wrap input{display:none}
   .switch-track{width:40px;height:22px;border-radius:999px;background:#e3ddc9;border:2px solid var(--ink);position:relative;transition:background .2s ease;flex:none}
   .switch-track::after{content:'';position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s ease}
   .switch-wrap input:checked + .switch-track{background:var(--mint)}
   .switch-wrap input:checked + .switch-track::after{transform:translateX(18px)}
   .switch-label{font-size:0.88rem;font-weight:700;white-space:nowrap}
-  button{margin-top:24px;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
+  button{margin-top:24px;width:100%;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:15px 28px;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
   button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
   button:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
   .toast{display:none;margin-top:12px;color:var(--ink);font-weight:700;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;box-shadow:var(--sh)}
@@ -327,10 +335,25 @@ function renderAdminHtml(t, vistas) {
   .admin-footer .soporte:hover{transform:translate(-1px,-1px)}
 </style></head>
 <body>
-<h1>🚚 Barra de Envío Gratis</h1>
-<p style="color:var(--ink-dim);font-weight:600;margin-bottom:16px;">👁️ ${vistas || 0} vista${(vistas || 0) === 1 ? '' : 's'} de la barra</p>
 ${renderBannerTrialPago(t)}
 <form id="f">
+  <div class="status-hero">
+    <div class="status-hero-top">
+      <div>
+        <span class="eyebrow">Barra Envío Gratis · Tienda ${t.store_id}</span>
+        <h1>🚚 Barra de Envío Gratis</h1>
+      </div>
+      <label class="switch-wrap">
+        <input type="checkbox" name="activo" ${t.activo !== false ? "checked" : ""} onchange="actualizarEstado(this)" />
+        <span class="switch-track"></span>
+        <span class="switch-label" id="switch-label-txt">${t.activo !== false ? "Barra activa" : "Barra desactivada"}</span>
+      </label>
+    </div>
+    <div class="status-hero-stats-label">Estadísticas</div>
+    <div class="status-hero-stats">
+      <div class="stat-tile"><span class="stat-num">${vistas || 0}</span><span class="stat-label">Vistas</span></div>
+    </div>
+  </div>
   <label>Monto para envío gratis ($)
     <input type="number" name="umbral" value="${t.umbral || 50000}">
   </label>
@@ -347,11 +370,6 @@ ${renderBannerTrialPago(t)}
   </label>
   <label>Color barra <input type="color" name="color_barra" value="${t.color_barra || "#E8A33D"}"></label>
   <label>Color fondo <input type="color" name="color_fondo" value="${t.color_fondo || "#12201B"}"></label>
-  <label class="switch-wrap">
-    <input type="checkbox" name="activo" ${t.activo !== false ? "checked" : ""} onchange="this.nextElementSibling.nextElementSibling.textContent = this.checked ? 'Barra activa' : 'Barra desactivada'" />
-    <span class="switch-track"></span>
-    <span class="switch-label">${t.activo !== false ? "Barra activa" : "Barra desactivada"}</span>
-  </label>
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
@@ -361,6 +379,9 @@ ${generarAppsHTML()}
   <a class="soporte" href="https://wa.me/5490000000000" target="_blank" rel="noopener">💬 Soporte por WhatsApp</a>
 </div>
 <script>
+function actualizarEstado(checkbox) {
+  document.getElementById('switch-label-txt').textContent = checkbox.checked ? 'Barra activa' : 'Barra desactivada';
+}
 document.getElementById('f').addEventListener('submit', async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
