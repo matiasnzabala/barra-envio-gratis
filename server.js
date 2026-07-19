@@ -116,7 +116,8 @@ app.get("/admin/:storeId", async (req, res) => {
   }
   const { data: tienda } = await supabase.from("barra_tiendas").select("*").eq("store_id", storeId).maybeSingle();
   if (!tienda) return res.status(404).send("Tienda no encontrada");
-  res.send(renderAdminHtml(tienda));
+  const vistas = await contarVistas(storeId);
+  res.send(renderAdminHtml(tienda, vistas));
 });
 
 // ---------------- Guardar config ----------------
@@ -163,6 +164,30 @@ app.get("/config", async (req, res) => {
     color_fondo: tienda.color_fondo || "#12201B",
   });
 });
+
+// ---------------- Estadísticas: vista de la barra (fire-and-forget) ----------------
+app.options("/track", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.status(204).end();
+});
+
+app.post("/track", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.status(204).end();
+  const { storeId, tipo } = req.body || {};
+  if (!storeId || tipo !== "vista") return;
+  const { error } = await supabase.from("barra_eventos").insert({ store_id: storeId, tipo });
+  if (error) console.error("Error guardando evento:", error);
+});
+
+async function contarVistas(storeId) {
+  const { count, error } = await supabase
+    .from("barra_eventos").select("*", { count: "exact", head: true }).eq("store_id", storeId);
+  if (error) { console.error("Error contando vistas:", error); return 0; }
+  return count || 0;
+}
 
 // ---------------- widget.js ----------------
 app.get("/widget.js", (req, res) => {
@@ -229,7 +254,7 @@ function generarAppsHTML() {
 }
 
 // ================= HTML admin =================
-function renderAdminHtml(t) {
+function renderAdminHtml(t, vistas) {
   return `<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8">
 <title>Barra de Envío Gratis</title>
@@ -278,6 +303,7 @@ function renderAdminHtml(t) {
 </style></head>
 <body>
 <h1>🚚 Barra de Envío Gratis</h1>
+<p style="color:var(--ink-dim);font-weight:600;margin-bottom:16px;">👁️ ${vistas || 0} vista${(vistas || 0) === 1 ? '' : 's'} de la barra</p>
 ${renderBannerTrialPago(t)}
 <form id="f">
   <label>Monto para envío gratis ($)
@@ -347,6 +373,15 @@ function WIDGET_JS(APP_URL) {
   var storeId = obtenerStoreId();
   if(!storeId){ console.warn('[BarraEnvioGratis] falta ?store=ID en el script src'); return; }
 
+  function track(tipo){
+    try {
+      fetch(API + "/track", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ storeId: storeId, tipo: tipo }), keepalive: true,
+      });
+    } catch(e){}
+  }
+
   var cfg = null;
   var barEl = null;
 
@@ -368,6 +403,7 @@ function WIDGET_JS(APP_URL) {
   }
 
   function montarBarra(){
+    track('vista');
     barEl = document.createElement('div');
     barEl.id = 'barra-envio-gratis';
     barEl.style.cssText = 'position:sticky;top:0;z-index:9999;padding:10px 16px;font-family:sans-serif;font-size:14px;text-align:center;background:' + cfg.color_fondo + ';color:#fff;';
