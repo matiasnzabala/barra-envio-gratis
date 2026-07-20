@@ -291,7 +291,7 @@ function renderAdminHtml(t, vistas) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#fdf9f0;--pink:#ff3d81;--mint:#3ddc97;--canary:#ffd23f;--coral:#ff6b5e;--ink:#111111;--ink-dim:#5b5648;--card:#ffffff;--sh:4px 4px 0px 0px #111111}
+  :root{--bg:#fdf9f0;--bg-alt:#f4f0e4;--pink:#ff3d81;--mint:#3ddc97;--canary:#ffd23f;--coral:#ff6b5e;--ink:#111111;--ink-dim:#5b5648;--card:#ffffff;--sh:4px 4px 0px 0px #111111}
   body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:500;padding:32px;max-width:560px;margin:0 auto}
   h1{font-family:'Archivo Black',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.4rem}
   .eyebrow{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;color:var(--pink);font-weight:700;display:block;margin-bottom:6px}
@@ -327,8 +327,8 @@ function renderAdminHtml(t, vistas) {
   .install-card{background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:20px 24px}
   .install-text{color:var(--ink-dim);font-size:0.88rem;line-height:1.5;margin-bottom:14px;font-weight:500}
   .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
-  .code-box{display:flex;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
-  .code-box code{flex:1;min-width:0;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap;display:block}
+  .code-box{display:flex;align-items:center;gap:10px;background:var(--bg-alt);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
+  .code-box code{flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap}
   .btn-copy{flex:none;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
   .btn-copy:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
   .btn-copy:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
