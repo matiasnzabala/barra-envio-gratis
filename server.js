@@ -327,9 +327,9 @@ function renderAdminHtml(t, vistas) {
   .install-card{background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:20px 24px}
   .install-text{color:var(--ink-dim);font-size:0.88rem;line-height:1.5;margin-bottom:14px;font-weight:500}
   .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
-  .code-box{display:flex;align-items:center;gap:10px;background:var(--bg-alt);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
-  .code-box code{flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap}
-  .btn-copy{flex:none;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
+  .code-box{background:var(--bg-alt);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
+  .code-box pre{margin:0 0 10px;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:pre}
+  .btn-copy{display:block;width:100%;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
   .btn-copy:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
   .btn-copy:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
   .apps-grid{display:grid;grid-template-columns:1fr;gap:12px}
@@ -390,7 +390,7 @@ ${renderBannerTrialPago(t)}
 <div class="install-card">
   <p class="install-text">Pegá este código una sola vez en tu tienda: Administración → Configuraciones → Código Externo → <code>Códigos dentro del &lt;head&gt;</code>.</p>
   <div class="code-box">
-    <span id="snippet-code" style="flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:#111111;overflow-x:auto;white-space:nowrap;display:block;">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</span>
+    <pre id="snippet-code">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</pre>
     <button type="button" class="btn-copy" onclick="copiarSnippet()">Copiar</button>
   </div>
 </div>
