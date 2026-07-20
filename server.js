@@ -324,6 +324,14 @@ function renderAdminHtml(t, vistas) {
   .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
   .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
   .section-label{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-top:32px;margin-bottom:12px}
+  .install-card{background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:20px 24px}
+  .install-text{color:var(--ink-dim);font-size:0.88rem;line-height:1.5;margin-bottom:14px;font-weight:500}
+  .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
+  .code-box{display:flex;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
+  .code-box code{flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap}
+  .btn-copy{flex:none;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
+  .btn-copy:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
+  .btn-copy:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
   .apps-grid{display:grid;grid-template-columns:1fr;gap:12px}
   .app-card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .12s ease,box-shadow .12s ease}
   .app-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0px 0px var(--ink)}
@@ -378,6 +386,14 @@ ${renderBannerTrialPago(t)}
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
+<div class="section-label">Instalación</div>
+<div class="install-card">
+  <p class="install-text">Pegá este código una sola vez en tu tienda: Administración → Configuraciones → Código Externo → <code>Códigos dentro del &lt;head&gt;</code>.</p>
+  <div class="code-box">
+    <code id="snippet-code">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</code>
+    <button type="button" class="btn-copy" onclick="copiarSnippet()">Copiar</button>
+  </div>
+</div>
 ${generarAppsHTML()}
 <div class="admin-footer">
   <span class="brand">Una app de <a href="https://hacecrecertutienda.com" target="_blank" rel="noopener">hacecrecertutienda.com</a></span>
@@ -386,6 +402,15 @@ ${generarAppsHTML()}
 <script>
 function actualizarEstado(checkbox) {
   document.getElementById('switch-label-txt').textContent = checkbox.checked ? 'Barra activa' : 'Barra desactivada';
+}
+function copiarSnippet() {
+  const texto = document.getElementById('snippet-code').textContent;
+  navigator.clipboard.writeText(texto).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const original = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    setTimeout(() => { btn.textContent = original; }, 1800);
+  });
 }
 document.getElementById('f').addEventListener('submit', async (e) => {
   e.preventDefault();
