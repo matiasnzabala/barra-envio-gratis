@@ -328,7 +328,7 @@ function renderAdminHtml(t, vistas) {
   .install-text{color:var(--ink-dim);font-size:0.88rem;line-height:1.5;margin-bottom:14px;font-weight:500}
   .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
   .code-box{display:flex;align-items:center;gap:10px;background:var(--bg);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
-  .code-box code{flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap}
+  .code-box code{flex:1;min-width:0;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:nowrap;display:block}
   .btn-copy{flex:none;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
   .btn-copy:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
   .btn-copy:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
