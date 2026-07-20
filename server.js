@@ -390,7 +390,7 @@ ${renderBannerTrialPago(t)}
 <div class="install-card">
   <p class="install-text">Pegá este código una sola vez en tu tienda: Administración → Configuraciones → Código Externo → <code>Códigos dentro del &lt;head&gt;</code>.</p>
   <div class="code-box">
-    <span id="snippet-code" style="flex:1;font-family:monospace;font-size:13px;color:#111111;background:#ffff00;padding:4px;display:inline-block;min-height:20px;">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</span>
+    <span id="snippet-code" style="flex:1;font-family:'Space Mono',monospace;font-size:0.78rem;color:#111111;">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</span>
     <button type="button" class="btn-copy" onclick="copiarSnippet()">Copiar</button>
   </div>
 </div>
