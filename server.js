@@ -49,6 +49,27 @@ function storeIdDeSesion(req) {
   return val === firmar(storeId) ? storeId : null;
 }
 
+async function suscribirWebhookBorrado(storeId, accessToken) {
+  try {
+    const resp = await fetch("https://developers.tiendanegocio.com/v1/webhooks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": accessToken,
+      },
+      body: JSON.stringify({ url: `${APP_URL}/webhooks/app-deleted`, event: "app/deleted" }),
+    });
+    if (!resp.ok) console.error(`No se pudo suscribir webhook app/deleted para ${storeId}:`, await resp.text());
+  } catch (err) {
+    console.error(`Error suscribiendo webhook app/deleted para ${storeId}:`, err);
+  }
+}
+
+async function borrarDatosTienda(storeId) {
+  await supabase.from("barra_eventos").delete().eq("store_id", storeId);
+  await supabase.from("barra_tiendas").delete().eq("store_id", storeId);
+}
+
 // ---------------- OAuth callback ----------------
 app.get("/callback", async (req, res) => {
   try {
@@ -96,6 +117,8 @@ app.get("/callback", async (req, res) => {
       await supabase.from("barra_tiendas").update({ access_token: tokenData.access_token }).eq("store_id", storeId);
     }
 
+    await suscribirWebhookBorrado(storeId, tokenData.access_token);
+
     res.cookie("tn_session", firmar(storeId), {
       httpOnly: true,
       secure: true,
@@ -107,6 +130,14 @@ app.get("/callback", async (req, res) => {
     console.error(err);
     res.status(500).send("Error interno");
   }
+});
+
+app.post("/webhooks/app-deleted", async (req, res) => {
+  const storeId = req.body?.store_id;
+  if (!storeId) return res.status(400).json({ error: "Falta store_id" });
+  await borrarDatosTienda(String(storeId));
+  console.log(`🗑️ Datos de tienda ${storeId} borrados por webhook app/deleted.`);
+  res.status(200).json({ ok: true });
 });
 
 // ---------------- Admin (sin storeId: redirige usando cookie, para "Aplicaciones integradas") ----------------
