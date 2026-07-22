@@ -387,14 +387,6 @@ ${renderBannerTrialPago(t)}
   <button type="submit">Guardar</button>
   <div class="toast" id="toast">Guardado ✅</div>
 </form>
-<div class="section-label">Instalación</div>
-<div class="install-card">
-  <p class="install-text">Pegá este código una sola vez en tu tienda: Administración → Configuraciones → Código Externo → <code>Códigos dentro del &lt;head&gt;</code>.</p>
-  <div class="code-box">
-    <pre id="snippet-code">&lt;script src="${APP_URL}/widget.js?store=${t.store_id}"&gt;&lt;/script&gt;</pre>
-    <button type="button" class="btn-copy" onclick="copiarSnippet()">Copiar</button>
-  </div>
-</div>
 ${generarAppsHTML()}
 <div class="admin-footer">
   <span class="brand">Una app de <a href="https://hacecrecertutienda.com" target="_blank" rel="noopener">hacecrecertutienda.com</a></span>
@@ -403,37 +395,6 @@ ${generarAppsHTML()}
 <script>
 function actualizarEstado(checkbox) {
   document.getElementById('switch-label-txt').textContent = checkbox.checked ? 'Barra activa' : 'Barra desactivada';
-}
-function copiarSnippet() {
-  const texto = document.getElementById('snippet-code').textContent;
-  const btn = document.querySelector('.btn-copy');
-  const mostrarCopiado = () => {
-    const original = btn.textContent;
-    btn.textContent = '¡Copiado!';
-    setTimeout(() => { btn.textContent = original; }, 1800);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(texto).then(mostrarCopiado).catch(() => copiarConFallback(texto, mostrarCopiado));
-  } else {
-    copiarConFallback(texto, mostrarCopiado);
-  }
-}
-
-function copiarConFallback(texto, onOk) {
-  const textarea = document.createElement('textarea');
-  textarea.value = texto;
-  textarea.style.position = 'fixed';
-  textarea.style.opacity = '0';
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-  try {
-    document.execCommand('copy');
-    onOk();
-  } catch (e) {
-    alert('No se pudo copiar automáticamente. Seleccioná el texto y copialo manualmente.');
-  }
-  document.body.removeChild(textarea);
 }
 document.getElementById('f').addEventListener('submit', async (e) => {
   e.preventDefault();
