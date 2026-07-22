@@ -40,6 +40,14 @@ function verificarCookie(req, storeId) {
   if (!val) return false;
   return val === firmar(storeId);
 }
+function storeIdDeSesion(req) {
+  const val = req.cookies?.tn_session;
+  if (!val) return null;
+  const idx = val.lastIndexOf(".");
+  if (idx === -1) return null;
+  const storeId = val.slice(0, idx);
+  return val === firmar(storeId) ? storeId : null;
+}
 
 // ---------------- OAuth callback ----------------
 app.get("/callback", async (req, res) => {
@@ -103,9 +111,8 @@ app.get("/callback", async (req, res) => {
 
 // ---------------- Admin (sin storeId: redirige usando cookie, para "Aplicaciones integradas") ----------------
 app.get("/admin", (req, res) => {
-  const val = req.cookies?.tn_session;
-  if (!val) return res.status(401).send("No autenticado. Entrá desde el panel de Tienda Negocio.");
-  const storeId = val.split(".")[0];
+  const storeId = storeIdDeSesion(req);
+  if (!storeId) return res.status(401).send("No autenticado. Entrá desde el panel de Tienda Negocio.");
   res.redirect(`/admin/${storeId}`);
 });
 
