@@ -329,60 +329,66 @@ function renderAdminHtml(t, vistas) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#fdf9f0;--bg-alt:#f4f0e4;--pink:#ff3d81;--mint:#3ddc97;--canary:#ffd23f;--coral:#ff6b5e;--ink:#111111;--ink-dim:#5b5648;--card:#ffffff;--sh:4px 4px 0px 0px #111111}
-  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:500;padding:32px;max-width:700px;margin:0 auto}
+  :root{--bg:#0d0f10;--bg-alt:#161a1c;--pink:#d4ff4f;--mint:#d4ff4f;--canary:#d4ff4f;--coral:#ff6b5e;--ink:#e9edee;--ink-dim:#8b969a;--card:#15181a;--line:#262b2e;--sh:none}
+  @keyframes bgDrift{0%{background-position:0% 0%,100% 0%,0 0}100%{background-position:10% 15%,90% 20%,0 0}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--pink) 55%, transparent)}50%{box-shadow:0 0 0 5px transparent}}
+  @media (prefers-reduced-motion: reduce){body{animation:none!important}*{transition:none!important}}
+  body{background:radial-gradient(ellipse 700px 420px at 12% -8%, color-mix(in srgb, var(--pink) 7%, transparent), transparent),radial-gradient(ellipse 600px 400px at 100% 10%, color-mix(in srgb, var(--pink) 5%, transparent), transparent),var(--bg);background-size:140% 140%,140% 140%,100% 100%;animation:bgDrift 18s ease-in-out infinite alternate;color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:500;padding:32px;max-width:700px;margin:0 auto}
   h1{font-family:'Archivo Black',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.4rem}
   .eyebrow{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;color:var(--pink);font-weight:700;display:block;margin-bottom:6px}
-  .status-hero{background:var(--card);border:2px solid var(--ink);border-radius:16px;box-shadow:var(--sh);padding:22px 24px;margin-bottom:16px}
+  .status-hero{background:var(--card);border:1px solid var(--line);border-radius:2px;box-shadow:var(--sh);padding:22px 24px;margin-bottom:16px;animation:fadeUp .5s ease both}
   .status-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
   .status-hero-stats-label{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;font-weight:700;color:var(--ink-dim);margin-top:20px}
   .status-hero-stats{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-  .stat-tile{flex:1;min-width:100px;background:var(--bg);border:2px solid var(--ink);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+  .stat-tile{flex:1;min-width:100px;background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
   .stat-num{font-family:'Archivo Black',sans-serif;font-size:1.6rem;line-height:1}
   .stat-label{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;font-size:0.68rem;color:var(--ink-dim);font-weight:700}
   label{display:block;margin-top:16px;font-size:14px;font-weight:700;color:var(--ink-dim)}
-  input[type=text],input[type=number]{width:100%;padding:10px;border-radius:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);margin-top:4px;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-weight:600}
+  input[type=text],input[type=number]{width:100%;padding:10px;border-radius:2px;border:1px solid var(--line);background:var(--card);color:var(--ink);margin-top:4px;box-sizing:border-box;font-family:'Space Grotesk',sans-serif;font-weight:600}
   input[type=text]:focus,input[type=number]:focus{outline:none;border-color:var(--pink)}
-  input[type=color]{margin-top:4px;border:2px solid var(--ink);border-radius:8px}
-  .switch-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:999px;padding:10px 16px 10px 10px;flex:none;width:fit-content}
+  input[type=color]{margin-top:4px;border:1px solid var(--line);border-radius:2px}
+  .switch-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);border-radius:999px;padding:10px 16px 10px 10px;flex:none;width:fit-content}
   .switch-wrap input{display:none}
-  .switch-track{width:40px;height:22px;border-radius:999px;background:#e3ddc9;border:2px solid var(--ink);position:relative;transition:background .2s ease;flex:none}
+  .switch-track{width:40px;height:22px;border-radius:999px;background:#e3ddc9;border:1px solid var(--line);position:relative;transition:background .2s ease;flex:none}
   .switch-track::after{content:'';position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:var(--ink);transition:transform .2s ease}
-  .switch-wrap input:checked + .switch-track{background:var(--mint)}
-  .switch-wrap input:checked + .switch-track::after{transform:translateX(18px)}
+  .switch-wrap input:checked + .switch-track{background:color-mix(in srgb, var(--mint) 25%, var(--bg-alt))}
+  .switch-wrap input:checked + .switch-track::after{transform:translateX(18px);background:var(--mint);animation:pulseDot 2.2s ease-in-out infinite}
   .switch-label{font-size:0.88rem;font-weight:700;white-space:nowrap}
-  button{margin-top:24px;width:100%;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:15px 28px;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
-  button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
-  button:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
-  .toast{display:none;margin-top:12px;color:var(--ink);font-weight:700;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:8px 16px;box-shadow:var(--sh)}
-  .banner{padding:14px 16px;border-radius:14px;margin-bottom:20px;font-size:14px;line-height:1.5;border:2px solid var(--ink);box-shadow:var(--sh);font-weight:600}
-  .banner--ok{background:var(--mint)}
-  .banner--warn{background:var(--canary)}
+  button{margin-top:24px;width:100%;background:var(--pink);color:#0d0f10;border:1px solid var(--line);padding:15px 28px;border-radius:2px;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease;font-family:'Space Grotesk',sans-serif}
+  button:hover{transform:translateY(-2px);}
+  button:active{transform:translateY(0);box-shadow:0px 0px 0px 0px var(--ink)}
+  .toast{display:none;margin-top:12px;color:#0d0f10;font-weight:700;background:var(--mint);border:1px solid var(--line);border-radius:999px;padding:8px 16px;box-shadow:var(--sh)}
+  .banner{padding:14px 16px;border-radius:2px;margin-bottom:20px;font-size:14px;line-height:1.5;border:1px solid var(--line);box-shadow:var(--sh);font-weight:600}
+  .banner--ok{background:var(--mint);color:#0d0f10}
+  .banner--warn{background:var(--canary);color:#111}
   .banner--off{background:var(--coral)}
   .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
   .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
   .section-label{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-top:32px;margin-bottom:12px}
-  .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
-  .code-box{background:var(--bg-alt);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
+  .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--line);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--pink)}
+  .code-box{background:var(--bg-alt);border:1px solid var(--line);border-radius:2px;padding:12px 14px}
   .code-box pre{margin:0 0 10px;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:pre}
-  .btn-copy{display:block;width:100%;background:var(--pink);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
-  .btn-copy:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0px 0px var(--ink)}
-  .btn-copy:active{transform:translate(2px,2px);box-shadow:0px 0px 0px 0px var(--ink)}
+  .btn-copy{display:block;width:100%;background:var(--pink);color:#0d0f10;border:1px solid var(--line);padding:8px 16px;border-radius:999px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;box-shadow:var(--sh);transition:transform .1s ease,box-shadow .1s ease}
+  .btn-copy:hover{transform:translateY(-2px);}
+  .btn-copy:active{transform:translateY(0);box-shadow:0px 0px 0px 0px var(--ink)}
   .apps-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:14px}
   @media (max-width:640px){ .apps-grid{grid-template-columns:1fr} }
-  .app-card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .12s ease,box-shadow .12s ease}
-  .app-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0px 0px var(--ink)}
+  .app-card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);box-shadow:var(--sh);border-radius:2px;padding:16px 18px;text-decoration:none;color:var(--ink);transition:transform .18s ease,border-color .18s ease;animation:fadeUp .5s ease both}
+  .app-card:hover .app-icon{transform:scale(1.15) rotate(-4deg)}
+  .app-icon{display:inline-block;transition:transform .2s ease}
+  .app-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb, var(--pink) 45%, var(--line))}
   .app-icon{font-size:1.5rem;line-height:1;flex:none;margin-top:2px}
   .app-info{flex:1;min-width:0}
   .app-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
   .app-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem}
   .app-desc{color:var(--ink-dim);font-size:0.85rem;line-height:1.4;font-weight:500}
-  .app-badge{font-family:'Space Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:999px;flex:none;border:1.5px solid var(--ink);font-weight:700;background:var(--mint);color:var(--ink)}
+  .app-badge{font-family:'Space Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:999px;flex:none;border:1px solid var(--line);font-weight:700;background:var(--mint);color:#0d0f10}
   .admin-footer{margin-top:36px;padding-top:20px;border-top:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
   .admin-footer .brand{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
   .admin-footer .brand a{color:var(--ink);font-weight:700;text-decoration:underline}
-  .admin-footer .soporte{display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:var(--ink);border:2px solid var(--ink);padding:8px 16px;border-radius:999px;font-weight:700;font-size:13px;box-shadow:var(--sh);text-decoration:none;transition:transform .1s ease}
-  .admin-footer .soporte:hover{transform:translate(-1px,-1px)}
+  .admin-footer .soporte{display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:#0d0f10;border:1px solid var(--line);padding:8px 16px;border-radius:999px;font-weight:700;font-size:13px;box-shadow:var(--sh);text-decoration:none;transition:transform .1s ease}
+  .admin-footer .soporte:hover{transform:translateY(-2px)}
 </style></head>
 <body>
 ${renderBannerTrialPago(t)}
