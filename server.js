@@ -324,8 +324,6 @@ function renderAdminHtml(t, vistas) {
   .banner a{color:var(--ink);font-weight:700;text-decoration:underline}
   .banner .storeid{opacity:.75;font-family:'Space Mono',monospace;font-size:12px}
   .section-label{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-top:32px;margin-bottom:12px}
-  .install-card{background:var(--card);border:2px solid var(--ink);box-shadow:var(--sh);border-radius:16px;padding:20px 24px}
-  .install-text{color:var(--ink-dim);font-size:0.88rem;line-height:1.5;margin-bottom:14px;font-weight:500}
   .install-text code{background:var(--canary);padding:1px 5px;border-radius:4px;border:1px solid var(--ink);font-family:'Space Mono',monospace;font-size:0.82rem;color:var(--ink)}
   .code-box{background:var(--bg-alt);border:2px solid var(--ink);border-radius:10px;padding:12px 14px}
   .code-box pre{margin:0 0 10px;font-family:'Space Mono',monospace;font-size:0.78rem;color:var(--ink);overflow-x:auto;white-space:pre}
